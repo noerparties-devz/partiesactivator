@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Noeractivator — Alight Motion Activator</title>
+  <meta name="description" content="Noeractivator — antarmuka praktis untuk proses aktivasi Alight Motion." />
+  <meta name="theme-color" content="#2563EB" id="meta-theme" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("noer_theme");
+        var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        var theme = saved || (prefersDark ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+        var meta = document.getElementById("meta-theme");
+        if (meta) meta.setAttribute("content", theme === "dark" ? "#0B0F14" : "#2563EB");
+      } catch (e) {}
+    })();
+  </script>
+  <style>
+    :root {
+      --bg: #FFFFFF; --bg-soft: #F7F8FA; --bg-muted: #F1F3F5;
+      --text: #17191C; --text-2: #6B7280; --text-3: #9CA3AF;
+      --border: #E5E7EB; --border-soft: #EEF0F3;
+      --nav-bg: rgba(255,255,255,.85);
+      --accent: #2563EB; --accent-hover: #1D4ED8;
+      --accent-soft: #EFF6FF; --accent-border: #BFDBFE;
+      --error: #DC2626; --error-soft: #FEF2F2; --error-border: #FECACA;
+      --success: #16A34A; --success-soft: #F0FDF4; --success-border: #BBF7D0;
+      --radius-lg: 20px; --radius: 14px; --radius-sm: 10px;
+      --shadow-xs: 0 1px 2px rgba(16,24,40,.04);
+      --shadow-sm: 0 1px 3px rgba(16,24,40,.06), 0 1px 2px rgba(16,24,40,.03);
+      --shadow-md: 0 8px 24px -12px rgba(16,24,40,.10), 0 2px 6px rgba(16,24,40,.04);
+      --shadow-lg: 0 24px 48px -24px rgba(16,24,40,.18);
+      --overlay: rgba(16,24,40,.35);
+    }
+    :root[data-theme="dark"] {
+      --bg: #0B0F14; --bg-soft: #0B0F14; /* Background Konsisten */
+      --bg-muted: #1B2330;
+      --text: #E6EAF0; --text-2: #9BA6B4; --text-3: #6B7688;
+      --border: #26303D; --border-soft: #1B2330;
+      --nav-bg: rgba(11,15,20,.82);
+      --accent: #3B82F6; --accent-hover: #60A5FA;
+      --accent-soft: rgba(59,130,246,.12); --accent-border: rgba(59,130,246,.35);
+      --error: #F87171; --error-soft: rgba(248,113,113,.10); --error-border: rgba(248,113,113,.30);
+      --success: #4ADE80; --success-soft: rgba(74,222,128,.10); --success-border: rgba(74,222,128,.30);
+      --shadow-xs: 0 1px 2px rgba(0,0,0,.4);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,.5), 0 1px 2px rgba(0,0,0,.3);
+      --shadow-md: 0 8px 24px -12px rgba(0,0,0,.6);
+      --shadow-lg: 0 24px 48px -24px rgba(0,0,0,.7);
+      --overlay: rgba(0,0,0,.55);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
+    body, .nav, .feature-item, .step-card, .goal-card, .notes-box, .form-card, .input, .drawer, .drawer-head, .footer, .btn-secondary, .qa-secondary, .theme-toggle, .menu-btn {
+      transition: background-color .25s ease, border-color .25s ease, color .25s ease;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+    body { margin: 0; font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.6; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; }
+    .container { width: 100%; max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes ripple { to { transform: scale(4); opacity: 0; } }
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s cubic-bezier(.2,.7,.2,1); will-change: opacity, transform; }
+    .reveal.in { opacity: 1; transform: none; }
+    .reveal.delay-1 { transition-delay: .08s; }
+    .reveal.delay-2 { transition-delay: .16s; }
+    .reveal.delay-3 { transition-delay: .24s; }
+    
+    .nav { position: sticky; top: 0; z-index: 100; background: var(--nav-bg); backdrop-filter: saturate(180%) blur(14px); -webkit-backdrop-filter: saturate(180%) blur(14px); border-bottom: 1px solid var(--border-soft); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 76px; gap: 12px; }
+    .brand { display: inline-flex; align-items: center; flex-shrink: 0; }
+    .brand-logo { height: 56px !important; min-height: 56px !important; width: auto !important; max-width: none !important; max-height: none !important; aspect-ratio: 1612 / 609; object-fit: contain; display: block; transition: transform .3s ease; }
+    .brand:hover .brand-logo { transform: scale(1.03); }
+    .brand-fallback { font-weight: 800; font-size: 20px; color: var(--text); letter-spacing: -.01em; }
+    .nav-actions { display: flex; align-items: center; gap: 8px; }
+    
+    .theme-toggle { width: 44px; height: 44px; border-radius: 10px; background: transparent; border: 1px solid var(--border-soft); cursor: pointer; color: var(--text); display: inline-flex; align-items: center; justify-content: center; transition: background .15s, border-color .15s, transform .15s; }
+    .theme-toggle:hover { background: var(--bg-soft); border-color: var(--border); }
+    .theme-toggle:active { transform: scale(.94); }
+    .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .theme-toggle svg { transition: transform .3s ease; }
+    .theme-toggle:hover svg { transform: rotate(15deg); }
+    :root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+    :root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+    .theme-toggle .icon-sun { display: none; }
+    .theme-toggle .icon-moon { display: block; }
+    
+    .menu-btn { width: 44px; height: 44px; border-radius: 10px; background: transparent; border: 1px solid var(--border-soft); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; color: var(--text); transition: background .15s, border-color .15s, transform .15s; }
+    .menu-btn:hover { background: var(--bg-soft); border-color: var(--border); }
+    .menu-btn:active { transform: scale(.94); }
+    .menu-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    
+    .drawer-backdrop { position: fixed; inset: 0; background: var(--overlay); opacity: 0; pointer-events: none; transition: opacity .25s ease; z-index: 200; }
+    .drawer-backdrop.open { opacity: 1; pointer-events: auto; }
+    .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(280px, 78vw); background: var(--bg); z-index: 201; transform: translateX(100%); transition: transform .3s cubic-bezier(.2,.7,.2,1); display: flex; flex-direction: column; box-shadow: -20px 0 60px -20px rgba(0,0,0,.3); }
+    .drawer.open { transform: translateX(0); }
+    .drawer-head { display: flex; align-items: center; justify-content: space-between; height: 68px; padding: 0 20px; border-bottom: 1px solid var(--border-soft); }
+    .drawer-title { font-size: 12px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: .08em; }
+    .drawer-close { width: 36px; height: 36px; border-radius: 8px; background: transparent; border: 1px solid transparent; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; color: var(--text-2); transition: background .15s, transform .15s; }
+    .drawer-close:hover { background: var(--bg-soft); }
+    .drawer-close:active { transform: scale(.94); }
+    
+    .drawer-body { padding: 14px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; }
+    .drawer-link { display: flex; align-items: center; gap: 12px; padding: 11px 12px; border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--text); transition: background .15s, transform .15s; }
+    .drawer-link:hover { background: var(--bg-soft); }
+    .drawer-link:active { transform: scale(.98); }
+    .drawer-link .ico { width: 32px; height: 32px; border-radius: 9px; background: var(--accent-soft); color: var(--accent); display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .drawer-link .txt { display: flex; flex-direction: column; gap: 1px; }
+    .drawer-link .sub { font-size: 12px; color: var(--text-3); font-weight: 400; }
+    .drawer-divider { height: 1px; background: var(--border-soft); margin: 10px 6px; }
+    
+    .drawer-footer { margin-top: auto; padding: 16px 8px 8px; border-top: 1px solid var(--border-soft); display: flex; align-items: center; gap: 10px; }
+    .drawer-footer img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 2px solid var(--bg); box-shadow: var(--shadow-xs); }
+    .drawer-footer .info { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+    .drawer-footer .name { font-size: 13px; font-weight: 700; margin: 0; color: var(--text); }
+    .drawer-footer .role { font-size: 11px; color: var(--text-3); margin: 0; }
+
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 22px; font-size: 14px; font-weight: 600; letter-spacing: -.005em; border-radius: var(--radius-sm); border: 1px solid transparent; cursor: pointer; text-align: center; white-space: nowrap; transition: background-color .15s, color .15s, border-color .15s, box-shadow .15s, transform .08s, opacity .15s; position: relative; overflow: hidden; }
+    .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 1px 2px rgba(37,99,235,.2), 0 4px 12px -4px rgba(37,99,235,.3); }
+    .btn-primary:hover:not(:disabled) { background: var(--accent-hover); box-shadow: 0 1px 2px rgba(37,99,235,.25), 0 6px 16px -4px rgba(37,99,235,.4); transform: translateY(-1px); }
+    .btn-primary:active:not(:disabled) { transform: translateY(1px); }
+    .btn-secondary { background: var(--bg); color: var(--text); border-color: var(--border); box-shadow: var(--shadow-xs); }
+    .btn-secondary:hover:not(:disabled) { background: var(--bg-soft); transform: translateY(-1px); }
+    .btn:disabled { opacity: .55; cursor: not-allowed; }
+    .btn-sm { padding: 8px 16px; font-size: 13px; }
+    .btn-block { width: 100%; }
+    .btn .ripple { position: absolute; border-radius: 50%; background: rgba(255,255,255,.5); transform: scale(0); animation: ripple .6s ease-out; pointer-events: none; }
+    
+    .hero { padding: 32px 0 0; }
+    .hero-image-wrap { width: 100%; aspect-ratio: 1612 / 609; border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-soft); border: 1px solid var(--border-soft); box-shadow: var(--shadow-md); position: relative; opacity: 0; animation: fadeIn .8s ease forwards; }
+    .hero-image { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s ease; }
+    .hero-image-wrap:hover .hero-image { transform: scale(1.02); }
+    .hero-image-fallback { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--text-3); font-size: 14px; text-align: center; padding: 24px; background: var(--bg-soft); }
+    .hero-image-fallback[hidden] { display: none; }
+    .quick-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+    .qa-btn { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 16px 20px; border-radius: var(--radius); font-size: 15px; font-weight: 600; text-align: center; border: 1px solid transparent; cursor: pointer; transition: background .15s, border-color .15s, box-shadow .15s, transform .12s; position: relative; overflow: hidden; }
+    .qa-btn:hover { transform: translateY(-2px); }
+    .qa-btn:active { transform: translateY(0); }
+    .qa-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .qa-primary { background: var(--accent); color: #fff; box-shadow: 0 1px 2px rgba(37,99,235,.2), 0 4px 12px -4px rgba(37,99,235,.3); }
+    .qa-primary:hover { background: var(--accent-hover); box-shadow: 0 6px 16px -4px rgba(37,99,235,.5); }
+    .qa-secondary { background: var(--bg); color: var(--text); border-color: var(--border); box-shadow: var(--shadow-xs); }
+    .qa-secondary:hover { background: var(--bg-soft); }
+    .limit-box { margin-top: 16px; padding: 16px 18px; border-radius: var(--radius); background: var(--bg-soft); border: 1px solid var(--border-soft); }
+    .limit-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 12px; }
+    .limit-title { font-size: 12px; font-weight: 600; color: var(--text-2); text-transform: uppercase; letter-spacing: .06em; }
+    .limit-count { font-size: 13px; font-weight: 600; color: var(--text); }
+    .limit-count .used { color: var(--accent); font-weight: 700; }
+    .limit-bar { height: 8px; background: var(--bg-muted); border-radius: 100px; overflow: hidden; }
+    .limit-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #60A5FA); border-radius: 100px; transition: width .8s cubic-bezier(.2,.7,.2,1); }
+    .limit-sub { margin-top: 10px; font-size: 12px; color: var(--text-3); }
+    
+    .section { padding: 72px 0; }
+    .section-soft { background: var(--bg-soft); }
+    .section-head { margin-bottom: 32px; max-width: 640px; }
+    .section-head.center { text-align: center; margin-left: auto; margin-right: auto; }
+    .eyebrow { display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+    .section-head h2 { font-size: clamp(24px, 3.4vw, 34px); font-weight: 800; letter-spacing: -.025em; line-height: 1.15; margin: 0 0 12px; color: var(--text); }
+    .section-head p { color: var(--text-2); font-size: 15.5px; line-height: 1.65; margin: 0; }
+    .lead-text { font-size: 16px; color: var(--text-2); line-height: 1.75; margin: 0; max-width: 720px; }
+    
+    .feature-list { display: grid; gap: 12px; }
+    .feature-item { display: flex; align-items: flex-start; gap: 16px; padding: 20px 22px; border-radius: var(--radius); background: var(--bg); border: 1px solid var(--border-soft); transition: border-color .2s, box-shadow .2s, transform .2s; }
+    .feature-item:hover { border-color: var(--border); box-shadow: var(--shadow-sm); transform: translateY(-2px); }
+    .feature-item .icon-wrap { width: 36px; height: 36px; border-radius: 9px; background: var(--accent-soft); color: var(--accent); display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; transition: transform .25s ease; }
+    .feature-item:hover .icon-wrap { transform: scale(1.1) rotate(-3deg); }
+    .feature-item h3 { font-size: 15.5px; font-weight: 700; letter-spacing: -.01em; margin: 0 0 4px; color: var(--text); }
+    .feature-item p { font-size: 14.5px; color: var(--text-2); margin: 0; line-height: 1.6; }
+    
+    .goal-card { max-width: 720px; margin: 0 auto; padding: 36px; border-radius: var(--radius-lg); background: var(--bg); border: 1px solid var(--border-soft); box-shadow: var(--shadow-sm); text-align: center; }
+    .goal-card p { font-size: 16.5px; color: var(--text-2); line-height: 1.75; margin: 0 0 20px; }
+    .goal-tag { display: inline-block; padding: 8px 16px; border-radius: 100px; background: var(--accent-soft); color: var(--accent-hover); font-size: 13.5px; font-weight: 600; }
+    
+    .steps-grid { display: grid; gap: 14px; max-width: 820px; margin: 0 auto; }
+    .step-card { display: flex; align-items: flex-start; gap: 18px; padding: 22px 24px; border-radius: var(--radius); background: var(--bg); border: 1px solid var(--border-soft); transition: border-color .2s, box-shadow .2s, transform .2s; }
+    .step-card:hover { border-color: var(--border); box-shadow: var(--shadow-sm); transform: translateX(4px); }
+    .step-num { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 10px; background: var(--accent-soft); color: var(--accent); font-size: 14px; font-weight: 700; letter-spacing: -.01em; flex-shrink: 0; transition: transform .25s ease; }
+    .step-card:hover .step-num { transform: scale(1.08); }
+    .step-body h3 { font-size: 15.5px; font-weight: 700; letter-spacing: -.01em; margin: 0 0 6px; color: var(--text); }
+    .step-body p { font-size: 14.5px; color: var(--text-2); margin: 0; line-height: 1.6; }
+    
+    .notes-box { max-width: 820px; margin: 32px auto 0; padding: 24px 28px; border-radius: var(--radius); background: var(--accent-soft); border: 1px solid var(--accent-border); }
+    .notes-box h4 { font-size: 14px; font-weight: 700; letter-spacing: -.005em; color: var(--accent-hover); margin: 0 0 14px; display: flex; align-items: center; gap: 8px; }
+    .notes-box ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .notes-box li { font-size: 14px; color: var(--text-2); line-height: 1.55; padding-left: 22px; position: relative; }
+    .notes-box li::before { content: ""; position: absolute; left: 6px; top: 9px; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+    
+    .footer { background: var(--bg); border-top: 1px solid var(--border-soft); padding: 40px 0 32px; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+    .footer-brand-logo { height: 44px !important; min-height: 44px !important; width: auto !important; max-width: none !important; aspect-ratio: 1612 / 609; object-fit: contain; display: block; }
+    .footer-credit { font-size: 13px; color: var(--text-3); margin: 0; }
+    .footer-credit b { color: var(--text-2); font-weight: 600; }
+    .footer-disclaimer { font-size: 12px; color: var(--text-3); margin: 16px 0 0; max-width: 640px; line-height: 1.55; }
+    
+    @media (max-width: 768px) {
+      .container { padding: 0 18px; }
+      .nav-inner { height: 68px; }
+      .brand-logo { height: 44px !important; min-height: 44px !important; }
+      .section { padding: 56px 0; }
+      .section-head { margin-bottom: 26px; }
+      .hero { padding: 20px 0 0; }
+      .quick-actions { gap: 10px; }
+      .qa-btn { padding: 14px 16px; font-size: 14px; }
+      .goal-card { padding: 26px; }
+      .notes-box { padding: 20px 22px; }
+      .footer { padding: 32px 0 24px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+      .footer-brand-logo { height: 36px !important; min-height: 36px !important; }
+    }
+    @media (max-width: 480px) {
+      .quick-actions { grid-template-columns: 1fr; }
+      .brand-logo { height: 40px !important; min-height: 40px !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="brand" aria-label="Noeractivator">
+        <img src="assets/logo-light.svg" alt="Noeractivator" class="brand-logo" data-theme-logo="1"
+             onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'brand-fallback',textContent:'Noeractivator'}));" />
+      </a>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Ubah tema">
+          <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        </button>
+        <button class="menu-btn" id="menu-btn" aria-label="Buka menu" aria-expanded="false" aria-controls="drawer">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="drawer-backdrop" id="drawer-backdrop"></div>
+  <aside class="drawer" id="drawer" aria-hidden="true" aria-label="Menu navigasi">
+    <div class="drawer-head">
+      <span class="drawer-title">Menu</span>
+      <button class="drawer-close" id="drawer-close" aria-label="Tutup menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="drawer-body">
+      <a href="about.html" class="drawer-link">
+        <span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+        <span class="txt"><span>About</span><span class="sub">Tentang Noeractivator</span></span>
+      </a>
+      <a href="donate.html" class="drawer-link">
+        <span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
+        <span class="txt"><span>Donation</span><span class="sub">Saweria, Sociabuzz, QRIS</span></span>
+      </a>
+      <div class="drawer-divider"></div>
+      <a href="https://whatsapp.com/channel/0029VbDZnyjIyPtP3VHRQa1O" target="_blank" rel="noopener noreferrer" class="drawer-link">
+        <span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span>
+        <span class="txt"><span>Channels WhatsApp</span><span class="sub">Update & info terbaru</span></span>
+      </a>
+      <a href="https://t.me/informationnoer" target="_blank" rel="noopener noreferrer" class="drawer-link">
+        <span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span>
+        <span class="txt"><span>Channels Telegram</span><span class="sub">Update & info terbaru</span></span>
+      </a>
+
+      <div class="drawer-footer">
+        <img src="assets/profile.png" alt="Noerparties" onerror="this.style.display='none'" />
+        <div class="info">
+          <p class="name">Noerparties</p>
+          <p class="role">Developer</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-image-wrap">
+          <img src="assets/hero-light.png" alt="Noeractivator" class="hero-image" data-theme-hero="1"
+               onerror="this.style.display='none';document.getElementById('hero-fallback').hidden=false;" />
+          <div class="hero-image-fallback" id="hero-fallback" hidden>
+            <span>Hero image akan tampil di sini setelah file <code>assets/hero-light.png</code> & <code>assets/hero-dark.png</code> ditambahkan.</span>
+          </div>
+        </div>
+        <div class="quick-actions reveal">
+          <a href="send.html" class="qa-btn qa-primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Aktivasi
+          </a>
+          <a href="#channels" class="qa-btn qa-secondary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            Channels
+          </a>
+        </div>
+        <div class="limit-box reveal delay-1">
+          <div class="limit-head">
+            <span class="limit-title">Batas Permintaan Harian</span>
+            <span class="limit-count"><span class="used" id="limit-used">—</span> / <span id="limit-total">300</span></span>
+          </div>
+          <div class="limit-bar"><div class="limit-fill" id="limit-fill" style="width:0%"></div></div>
+          <p class="limit-sub" id="limit-sub">Indikator kuota tersedia setelah permintaan pertama dilakukan.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="container">
+        <header class="section-head reveal">
+          <span class="eyebrow">Tentang</span>
+          <h2>What is Noeractivator?</h2>
+        </header>
+        <p class="lead-text reveal delay-1">
+          Dengan antarmuka bertema terang yang bersih, Noeractivator dirancang agar proses aktivasi lebih mudah diikuti melalui alur yang terstruktur dan ramah pengguna.
+        </p>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="fitur">
+      <div class="container">
+        <header class="section-head reveal">
+          <span class="eyebrow">Fitur</span>
+          <h2>Fitur Utama</h2>
+        </header>
+        <div class="feature-list">
+          <div class="feature-item reveal">
+            <div class="icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg></div>
+            <div><h3>Antarmuka Sederhana</h3><p>Desain modern dan bersih yang mudah digunakan.</p></div>
+          </div>
+          <div class="feature-item reveal delay-1">
+            <div class="icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+            <div><h3>Proses Terarah</h3><p>Alur yang terstruktur untuk membantu pengguna mengikuti setiap tahapan aktivasi.</p></div>
+          </div>
+          <div class="feature-item reveal delay-2">
+            <div class="icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+            <div><h3>Desain Responsif</h3><p>Tampilan yang menyesuaikan berbagai ukuran layar, baik ponsel maupun desktop.</p></div>
+          </div>
+          <div class="feature-item reveal">
+            <div class="icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div>
+            <div><h3>Backend Cloudflare</h3><p>Menggunakan backend berbasis Cloudflare untuk memproses permintaan aktivasi.</p></div>
+          </div>
+          <div class="feature-item reveal delay-1">
+            <div class="icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+            <div><h3>Batas Permintaan Harian</h3><p>Memiliki batas global sebanyak 300 permintaan per hari.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="tujuan">
+      <div class="container">
+        <header class="section-head center reveal">
+          <span class="eyebrow">Tujuan</span>
+          <h2>Tujuan Kami</h2>
+        </header>
+        <div class="goal-card reveal delay-1">
+          <p>Menyediakan platform yang praktis, mudah diakses, dan sederhana bagi pengguna yang ingin menjalankan proses aktivasi Alight Motion.</p>
+          <span class="goal-tag">Noeractivator — Sederhana, cepat, dan andal.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="channels">
+      <div class="container">
+        <header class="section-head center reveal">
+          <span class="eyebrow">Komunitas</span>
+          <h2>Channels</h2>
+          <p>Ikuti kanal resmi untuk info dan update terbaru dari Noerparties.</p>
+        </header>
+        <div class="quick-actions reveal delay-1" style="max-width:560px;margin:0 auto;">
+          <a href="https://whatsapp.com/channel/0029VbDZnyjIyPtP3VHRQa1O" target="_blank" rel="noopener noreferrer" class="qa-btn qa-secondary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            WhatsApp Channel
+          </a>
+          <a href="https://t.me/informationnoer" target="_blank" rel="noopener noreferrer" class="qa-btn qa-secondary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Telegram Channel
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="how">
+      <div class="container">
+        <header class="section-head reveal">
+          <span class="eyebrow">Alur</span>
+          <h2>How to use Noeractivator?</h2>
+          <p>Ikuti langkah-langkah berikut untuk menyelesaikan proses aktivasi Alight Motion melalui Noeractivator.</p>
+        </header>
+        <div class="steps-grid">
+          <div class="step-card reveal"><div class="step-num">01</div><div class="step-body"><h3>Mulai Aktivasi</h3><p>Tekan tombol Mulai Aktivasi pada halaman utama untuk memulai proses.</p></div></div>
+          <div class="step-card reveal delay-1"><div class="step-num">02</div><div class="step-body"><h3>Masukkan Email</h3><p>Masukkan alamat email yang diperlukan, lalu kirim permintaan aktivasi.</p></div></div>
+          <div class="step-card reveal delay-2"><div class="step-num">03</div><div class="step-body"><h3>Periksa Email</h3><p>Buka kotak masuk email kamu untuk mencari pesan aktivasi. Jika menggunakan Gmail dan pesan tidak ditemukan di kotak masuk, periksa folder Spam.</p></div></div>
+          <div class="step-card reveal"><div class="step-num">04</div><div class="step-body"><h3>Salin URL Verifikasi</h3><p>Buka pesan yang diterima, kemudian salin URL verifikasi yang tersedia di dalamnya.</p></div></div>
+          <div class="step-card reveal delay-1"><div class="step-num">05</div><div class="step-body"><h3>Buka Halaman Verify</h3><p>Kembali ke Noeractivator, buka halaman Verify, lalu tempelkan URL verifikasi yang sudah disalin ke kolom yang tersedia.</p></div></div>
+          <div class="step-card reveal delay-2"><div class="step-num">06</div><div class="step-body"><h3>Tunggu Hingga Selesai</h3><p>Tunggu sampai proses selesai. Jangan menutup halaman selama proses masih berlangsung.</p></div></div>
+        </div>
+        <div class="notes-box reveal">
+          <h4><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Catatan Penting</h4>
+          <ul>
+            <li>Pastikan alamat email yang dimasukkan benar.</li>
+            <li>Periksa folder Spam jika email aktivasi tidak ditemukan.</li>
+            <li>Jangan membagikan URL verifikasi kepada orang lain.</li>
+            <li>Proses dapat dipengaruhi oleh ketersediaan layanan dan batas permintaan harian.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <img src="assets/logo-light.svg" alt="Noeractivator" class="footer-brand-logo" data-theme-logo="1"
+             onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'brand-fallback',textContent:'Noeractivator'}));" />
+        <p class="footer-credit">Noeractivator developed by <b>Noerparties</b></p>
+      </div>
+      <p class="footer-disclaimer">Noeractivator bukan produk resmi Alight Motion dan tidak berafiliasi dengan pemilik merek tersebut.</p>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

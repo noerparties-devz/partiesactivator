@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About — Noeractivator</title>
+  <meta name="description" content="Tentang Noeractivator." />
+  <meta name="theme-color" content="#2563EB" id="meta-theme" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("noer_theme");
+        var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        var theme = saved || (prefersDark ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+        var meta = document.getElementById("meta-theme");
+        if (meta) meta.setAttribute("content", theme === "dark" ? "#0B0F14" : "#2563EB");
+      } catch (e) {}
+    })();
+  </script>
+  <style>
+    :root {
+      --bg: #FFFFFF; --bg-soft: #F7F8FA; --bg-muted: #F1F3F5;
+      --text: #17191C; --text-2: #6B7280; --text-3: #9CA3AF;
+      --border: #E5E7EB; --border-soft: #EEF0F3;
+      --nav-bg: rgba(255,255,255,.85);
+      --accent: #2563EB; --accent-hover: #1D4ED8;
+      --accent-soft: #EFF6FF; --accent-border: #BFDBFE;
+      --error: #DC2626; --error-soft: #FEF2F2; --error-border: #FECACA;
+      --success: #16A34A; --success-soft: #F0FDF4; --success-border: #BBF7D0;
+      --radius-lg: 20px; --radius: 14px; --radius-sm: 10px;
+      --shadow-xs: 0 1px 2px rgba(16,24,40,.04);
+      --shadow-sm: 0 1px 3px rgba(16,24,40,.06), 0 1px 2px rgba(16,24,40,.03);
+      --shadow-md: 0 8px 24px -12px rgba(16,24,40,.10), 0 2px 6px rgba(16,24,40,.04);
+    }
+    :root[data-theme="dark"] {
+      --bg: #0B0F14; --bg-soft: #0B0F14;
+      --bg-muted: #1B2330;
+      --text: #E6EAF0; --text-2: #9BA6B4; --text-3: #6B7688;
+      --border: #26303D; --border-soft: #1B2330;
+      --nav-bg: rgba(11,15,20,.82);
+      --accent: #3B82F6; --accent-hover: #60A5FA;
+      --accent-soft: rgba(59,130,246,.12); --accent-border: rgba(59,130,246,.35);
+      --error: #F87171; --error-soft: rgba(248,113,113,.10); --error-border: rgba(248,113,113,.30);
+      --success: #4ADE80; --success-soft: rgba(74,222,128,.10); --success-border: rgba(74,222,128,.30);
+      --shadow-xs: 0 1px 2px rgba(0,0,0,.4);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,.5), 0 1px 2px rgba(0,0,0,.3);
+      --shadow-md: 0 8px 24px -12px rgba(0,0,0,.6);
+    }
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
+    body, .nav, .theme-toggle, .btn-secondary, .card { transition: background-color .25s ease, border-color .25s ease, color .25s ease; }
+    body { margin: 0; font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); font-size: 16px; line-height: 1.6; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; }
+    .container { width: 100%; max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+    .container-narrow { max-width: 680px; }
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s cubic-bezier(.2,.7,.2,1); }
+    .reveal.in { opacity: 1; transform: none; }
+    .reveal.delay-1 { transition-delay: .08s; }
+    .reveal.delay-2 { transition-delay: .16s; }
+    .nav { position: sticky; top: 0; z-index: 100; background: var(--nav-bg); backdrop-filter: saturate(180%) blur(14px); -webkit-backdrop-filter: saturate(180%) blur(14px); border-bottom: 1px solid var(--border-soft); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 76px; gap: 12px; }
+    .brand { display: inline-flex; align-items: center; flex-shrink: 0; }
+    .brand-logo { height: 56px !important; min-height: 56px !important; width: auto !important; max-width: none !important; max-height: none !important; aspect-ratio: 1612 / 609; object-fit: contain; display: block; transition: transform .3s ease; }
+    .brand:hover .brand-logo { transform: scale(1.03); }
+    .brand-fallback { font-weight: 800; font-size: 20px; color: var(--text); letter-spacing: -.01em; }
+    .nav-actions { display: flex; align-items: center; gap: 8px; }
+    .theme-toggle { width: 44px; height: 44px; border-radius: 10px; background: transparent; border: 1px solid var(--border-soft); cursor: pointer; color: var(--text); display: inline-flex; align-items: center; justify-content: center; transition: background .15s, border-color .15s, transform .15s; }
+    .theme-toggle:hover { background: var(--bg-soft); border-color: var(--border); }
+    .theme-toggle:active { transform: scale(.94); }
+    .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    :root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+    :root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+    .theme-toggle .icon-sun { display: none; }
+    .theme-toggle .icon-moon { display: block; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 22px; font-size: 14px; font-weight: 600; border-radius: var(--radius-sm); border: 1px solid transparent; cursor: pointer; text-align: center; white-space: nowrap; transition: background-color .15s, border-color .15s, transform .08s; }
+    .btn-secondary { background: var(--bg); color: var(--text); border-color: var(--border); box-shadow: var(--shadow-xs); }
+    .btn-secondary:hover { background: var(--bg-soft); transform: translateY(-1px); }
+    .btn-sm { padding: 8px 16px; font-size: 13px; }
+    .btn-block { width: 100%; }
+    .page { padding: 56px 0 88px; }
+    .page-head { margin-bottom: 32px; }
+    .page-head h1 { font-size: clamp(28px, 4vw, 40px); font-weight: 800; letter-spacing: -.03em; margin: 0 0 12px; }
+    .page-head p { color: var(--text-2); font-size: 16px; margin: 0; max-width: 520px; line-height: 1.65; }
+    .eyebrow { display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+    .card { background: var(--bg); border: 1px solid var(--border-soft); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow-sm); margin-bottom: 16px; }
+    .card h2 { font-size: 18px; font-weight: 700; letter-spacing: -.01em; margin: 0 0 10px; color: var(--text); }
+    .card p { font-size: 15px; color: var(--text-2); line-height: 1.75; margin: 0; }
+    .card p + p { margin-top: 12px; }
+    .profile-big { display: flex; align-items: center; gap: 16px; padding: 24px; background: var(--bg-soft); border: 1px solid var(--border-soft); border-radius: var(--radius); margin-bottom: 24px; }
+    .profile-big img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 2px solid var(--bg); box-shadow: var(--shadow-xs); }
+    .profile-big .name { font-size: 16px; font-weight: 700; margin: 0; color: var(--text); }
+    .profile-big .role { font-size: 13px; color: var(--text-3); margin: 2px 0 0; }
+    @media (max-width: 768px) {
+      .container { padding: 0 18px; }
+      .nav-inner { height: 68px; }
+      .brand-logo { height: 44px !important; min-height: 44px !important; }
+      .page { padding: 32px 0 64px; }
+      .card { padding: 22px; }
+    }
+    @media (max-width: 480px) {
+      .brand-logo { height: 40px !important; min-height: 40px !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="brand" aria-label="Noeractivator">
+        <img src="assets/logo-light.svg" alt="Noeractivator" class="brand-logo" data-theme-logo="1"
+             onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'brand-fallback',textContent:'Noeractivator'}));" />
+      </a>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Ubah tema">
+          <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        </button>
+        <a href="index.html" class="btn btn-secondary btn-sm">Kembali</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container container-narrow">
+      <header class="page-head reveal">
+        <span class="eyebrow">Tentang</span>
+        <h1>About Noeractivator</h1>
+        <p>Antarmuka web praktis untuk proses aktivasi Alight Motion.</p>
+      </header>
+
+      <div class="profile-big reveal delay-1">
+        <img src="assets/profile.png" alt="Noerparties" onerror="this.style.display='none'" />
+        <div>
+          <p class="name">Noerparties</p>
+          <p class="role">Developer of Noeractivator</p>
+        </div>
+      </div>
+
+      <div class="card reveal delay-1">
+        <h2>Apa itu Noeractivator?</h2>
+        <p>Noeractivator adalah antarmuka web yang dirancang untuk menyediakan proses permintaan dan verifikasi yang praktis. Dengan desain minimalis dan navigasi sederhana, pengguna dapat mengikuti alur layanan dengan lebih mudah.</p>
+      </div>
+
+      <div class="card reveal delay-2">
+        <h2>Tujuan Kami</h2>
+        <p>Menyediakan platform yang praktis, mudah diakses, dan sederhana bagi pengguna yang ingin menjalankan proses aktivasi Alight Motion.</p>
+      </div>
+
+      <div class="card reveal">
+        <h2>Catatan</h2>
+        <p>Noeractivator bukan produk resmi Alight Motion dan tidak berafiliasi dengan pemilik merek tersebut. Seluruh proses bergantung pada respons dan ketersediaan backend.</p>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
